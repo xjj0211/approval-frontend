@@ -1,4 +1,4 @@
-<img width="2560" height="1305" alt="ScreenShot_2025-12-01_172322_444" src="https://github.com/user-attachments/assets/fc5cdffe-903b-4347-afaa-a636e7aef3b6" /># 🏢 企业级审批系统 (前端) | Enterprise Approval System
+# 🏢 企业级审批系统 (前端) | Enterprise Approval System
 
 > 基于 React + TypeScript + Ant Design 开发的企业审批管理平台，实现了动态表单渲染、RBAC 角色权限控制及完整的工作流处理。
 
@@ -24,12 +24,11 @@
 * **部署托管**: Vercel
 
 ## 📸 功能截图
-*(建议在这里放 2-3 张截图，比如列表页、动态表单页、详情抽屉)*
-| 审批列表页 | 动态表单页 |
-|Data | Data |
-| ![List](<img width="2560" height="1305" alt="ScreenShot_2025-12-01_172322_444" src="https://github.com/user-attachments/assets/b49a2623-d0fe-4e22-8408-997d472074fc" />
-) | ![Form](<img width="2560" height="1305" alt="ScreenShot_2025-12-01_172538_615" src="https://github.com/user-attachments/assets/da9525a4-554c-4f22-b553-5d89987d3d07" />
-) |
+| 审批列表页 |
+<img width="2560" height="1305" alt="ScreenShot_2025-12-01_172322_444" src="https://github.com/user-attachments/assets/b49a2623-d0fe-4e22-8408-997d472074fc" />
+| 新建审批页 |
+<img width="2560" height="1305" alt="ScreenShot_2025-12-01_172538_615" src="https://github.com/user-attachments/assets/da9525a4-554c-4f22-b553-5d89987d3d07" />
+
 
 ## 🚀 本地运行
 
