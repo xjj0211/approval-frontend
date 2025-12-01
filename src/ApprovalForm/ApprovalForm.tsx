@@ -3,14 +3,13 @@ import { Card, Form, Input, DatePicker, Cascader, Button, message, Space, Modal,
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
-import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { UploadFile } from 'antd/es/upload/interface';
 import { departmentOptions } from '../mock';
 import { approvalApi } from '../services/api';
 
 const { TextArea } = Input;
 
-// ✅ 1. 定义组件映射表 (Component Map)
-// 将后端返回的字符串 Key 映射为真实的前端组件
+// 组件映射表
 const COMPONENT_MAP: Record<string, React.ReactNode> = {
   Input: <Input placeholder="请输入" style={{ width: '100%', height: 40 }} />,
   Textarea: <TextArea rows={6} placeholder="请输入" showCount style={{ width: '100%' }} />,
@@ -18,7 +17,6 @@ const COMPONENT_MAP: Record<string, React.ReactNode> = {
   DateTimePicker: <DatePicker style={{ width: '100%', height: 40 }} />,
 };
 
-// 辅助函数
 const getBase64 = (file: File): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -33,33 +31,29 @@ const ApprovalForm: React.FC = () => {
   const [form] = Form.useForm();
   const isEdit = !!id;
 
-  // 状态管理
   const [loading, setLoading] = useState(false);
-  const [formSchema, setFormSchema] = useState<any[]>([]); // ✅ 存储后端返回的 Schema
+  const [formSchema, setFormSchema] = useState<any[]>([]);
   
-  // 文件上传状态 (保留之前的上传功能)
+  // 图片预览状态
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [excelList, setExcelList] = useState<UploadFile[]>([]);
 
-  // ✅ 2. 初始化：获取 Schema 配置 + 获取详情数据
+  // 初始化
   useEffect(() => {
     const initData = async () => {
       setLoading(true);
       try {
-        // A. 并行请求：获取表单配置 & 详情数据(如果是编辑模式)
         const [schemaRes, detailRes] = await Promise.all([
           approvalApi.getSchema(),
           isEdit && id ? approvalApi.getDetail(id) : Promise.resolve(null)
         ]);
 
-        // B. 设置 Schema
         if (schemaRes.data && schemaRes.data.data) {
           setFormSchema(schemaRes.data.data);
         }
 
-        // C. 回显详情数据
         if (detailRes && detailRes.data) {
           const data = detailRes.data;
           form.setFieldsValue({
@@ -67,7 +61,6 @@ const ApprovalForm: React.FC = () => {
             executeDate: data.executeDate ? dayjs(data.executeDate) : undefined,
           });
 
-          // 回显文件
           if (data.images) {
             setFileList(data.images.map((url: string, index: number) => ({
               uid: `-${index}`, name: `img-${index}`, status: 'done', url
@@ -90,10 +83,17 @@ const ApprovalForm: React.FC = () => {
     initData();
   }, [id, isEdit, form]);
 
-  // 提交逻辑 (保持不变)
+  // 处理预览 (让 setPreviewImage 被使用)
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as File);
+    }
+    setPreviewImage(file.url || (file.preview as string));
+    setPreviewOpen(true);
+  };
+
   const handleFinish = async (values: any) => {
     try {
-      // 处理文件
       const imagePromises = fileList.map(async (file) => file.url || await getBase64(file.originFileObj as File));
       const images = await Promise.all(imagePromises);
 
@@ -106,7 +106,7 @@ const ApprovalForm: React.FC = () => {
 
       const payload = {
         ...values,
-        executeDate: values.executeDate?.format('YYYY-MM-DD'), // 这里的可选链防止刚加载未选日期时报错
+        executeDate: values.executeDate?.format('YYYY-MM-DD'),
         images,
         attachments,
       };
@@ -127,10 +127,8 @@ const ApprovalForm: React.FC = () => {
 
   const dummyRequest = ({ onSuccess }: any) => setTimeout(() => onSuccess("ok"), 500);
 
-  // ✅ 3. 动态渲染函数
   const renderDynamicFields = () => {
     return formSchema.map((fieldConfig) => {
-      // 解析验证规则
       const rules = [];
       if (fieldConfig.validator?.required) {
         rules.push({ required: true, message: `请输入${fieldConfig.name}` });
@@ -139,11 +137,7 @@ const ApprovalForm: React.FC = () => {
         rules.push({ max: fieldConfig.validator.maxCount, message: `最大长度 ${fieldConfig.validator.maxCount}` });
       }
 
-      // 根据 component 字符串从 MAP 中取组件
-      // 默认回落到 Input 防止后端传错崩坏
       const Component = COMPONENT_MAP[fieldConfig.component] || COMPONENT_MAP['Input'];
-
-      // 克隆组件以注入额外的属性 (如果需要)
       const FormComponent = React.cloneElement(Component as React.ReactElement, {
          maxLength: fieldConfig.validator?.maxCount 
       } as any);
@@ -170,12 +164,18 @@ const ApprovalForm: React.FC = () => {
       >
         <Form form={form} layout="vertical" onFinish={handleFinish}>
           
-          {/* ✅ 动态渲染区域 */}
           {renderDynamicFields()}
 
-          {/* 固定渲染区域 (附件上传比较复杂，通常作为固定块处理，或者后端 Schema 需要支持更复杂的配置) */}
           <Form.Item label="图片附件">
-            <Upload customRequest={dummyRequest} listType="picture-card" fileList={fileList} onChange={({ fileList }) => setFileList(fileList)} maxCount={5} accept="image/*">
+            <Upload 
+              customRequest={dummyRequest} 
+              listType="picture-card" 
+              fileList={fileList} 
+              onChange={({ fileList }) => setFileList(fileList)} 
+              onPreview={handlePreview} 
+              maxCount={5} 
+              accept="image/*"
+            >
               {fileList.length < 5 && <div><PlusOutlined /><div>上传</div></div>}
             </Upload>
           </Form.Item>
