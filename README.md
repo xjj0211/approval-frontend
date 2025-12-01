@@ -1,73 +1,71 @@
-# React + TypeScript + Vite
+<img width="2560" height="1305" alt="ScreenShot_2025-12-01_172322_444" src="https://github.com/user-attachments/assets/fc5cdffe-903b-4347-afaa-a636e7aef3b6" /># 🏢 企业级审批系统 (前端) | Enterprise Approval System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> 基于 React + TypeScript + Ant Design 开发的企业审批管理平台，实现了动态表单渲染、RBAC 角色权限控制及完整的工作流处理。
 
-Currently, two official plugins are available:
+## 🔗 在线演示
+**👉 [点击查看演示 Demo](https://你的vercel链接.vercel.app)**
+*(注：后端部署在 Render 免费节点，首次加载可能需要 1 分钟唤醒服务器，请耐心等待)*
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📚 项目介绍
+[cite_start]本项目是一个面向 B 端生产场景的审批系统 [cite: 3]，模拟了真实企业内部的请假、采购等审批流程。项目采用前后端分离架构，前端负责交互逻辑与界面渲染，通过 RESTful API 与 NestJS 后端交互。
 
-## React Compiler
+### ✨ 核心亮点 (Project Highlights)
+* [cite_start]**🎭 动态表单引擎**：摒弃硬编码，支持通过后端 Schema 动态渲染表单组件（Input/Select/Date...），实现低代码能力的初步探索 [cite: 81]。
+* [cite_start]**🔐 角色权限管理 (RBAC)**：支持“申请人”与“审批员”双角色无缝切换，不同角色拥有严格的操作权限隔离（如仅审批员可见通过/驳回按钮）[cite: 32]。
+* [cite_start]**📂 附件全流程支持**：实现了图片预览、多文件上传、Excel 模板下载及 Base64 数据流转 [cite: 58]。
+* **📱 响应式与交互**：深度定制 Ant Design 组件样式，实现了抽屉式详情页 (Drawer) 与 复杂的筛选级联交互。
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ 技术栈
+* **核心框架**: React 18, TypeScript, Vite
+* **UI 组件库**: Ant Design v5
+* **路由管理**: React Router v6
+* **网络请求**: Axios (封装拦截器与 BaseUrl)
+* **时间处理**: Day.js
+* **部署托管**: Vercel
 
-## Expanding the ESLint configuration
+## 📸 功能截图
+*(建议在这里放 2-3 张截图，比如列表页、动态表单页、详情抽屉)*
+| 审批列表页 | 动态表单页 |
+|Data | Data |
+| ![List](<img width="2560" height="1305" alt="ScreenShot_2025-12-01_172322_444" src="https://github.com/user-attachments/assets/b49a2623-d0fe-4e22-8408-997d472074fc" />
+) | ![Form](<img width="2560" height="1305" alt="ScreenShot_2025-12-01_172538_615" src="https://github.com/user-attachments/assets/da9525a4-554c-4f22-b553-5d89987d3d07" />
+) |
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🚀 本地运行
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. **克隆项目**
+\`\`\`bash
+git clone https://github.com/xjj/approval-system.git
+cd approval-system
+\`\`\`
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+2. **安装依赖**
+\`\`\`bash
+npm install
+\`\`\`
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+3. **启动开发服务器**
+\`\`\`bash
+npm run dev
+\`\`\`
+打开浏览器访问 `http://localhost:5173`。
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📂 目录结构
+\`\`\`text
+src/
+├── components/    # 公共组件
+├── pages/         # 页面视图 (ApprovalList, ApprovalForm)
+├── services/      # API 接口封装 (api.ts)
+├── types/         # TypeScript 类型定义
+├── mock/          # 模拟数据 (早期开发使用)
+└── App.tsx        # 路由与全局布局
+\`\`\`
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 📝 进阶任务完成情况
+- [x] [cite_start]基础任务：列表页、新建页、详情页、角色切换 [cite: 14]
+- [x] [cite_start]进阶任务1：Node.js 后端服务对接 (NestJS) [cite: 48]
+- [x] [cite_start]进阶任务2：附件上传 (图片预览 + Excel) [cite: 57]
+- [x] [cite_start]进阶任务3：动态表单 Schema 渲染 [cite: 81]
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+*Created by [你的名字]*
