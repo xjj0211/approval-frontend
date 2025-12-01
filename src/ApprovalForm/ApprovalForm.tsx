@@ -166,7 +166,7 @@ const ApprovalForm: React.FC = () => {
       <Card 
         loading={loading}
         style={{ width: '100%' }} 
-        title={<span style={{ fontSize: 18, fontWeight: 'bold' }}>{isEdit ? '审批单修改' : '新建审批单 (动态渲染)'}</span>}
+        title={<span style={{ fontSize: 18, fontWeight: 'bold' }}>{isEdit ? '审批单修改' : '新建审批单'}</span>}
       >
         <Form form={form} layout="vertical" onFinish={handleFinish}>
           
