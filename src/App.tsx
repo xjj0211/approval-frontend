@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'; // ✅ 引入 useLocation
-import { Layout, Switch, Typography, message } from 'antd';
-import type { ApprovalItem, UserRole } from './types';
+import { Layout, Switch, Typography} from 'antd';
+import type { UserRole } from './types';
 import ApprovalList from './ApprovalList/ApprovalList';
 import ApprovalForm from './ApprovalForm/ApprovalForm';
 
