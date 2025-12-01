@@ -3,7 +3,8 @@ import type{ ApprovalItem } from '../types';
 
 // 配置后端地址
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api',
+  //baseURL: 'http://localhost:3000/api',
+  baseURL: 'https://approval-backend-ab8i.onrender.com/api',
 });
 
 export const approvalApi = {
