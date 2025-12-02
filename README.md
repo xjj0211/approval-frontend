@@ -3,7 +3,7 @@
 > 基于 React + TypeScript + Ant Design 开发的企业审批管理平台，实现了动态表单渲染、RBAC 角色权限控制及完整的工作流处理。
 
 ## 🔗 在线演示
-**👉 [点击查看演示 Demo](https://你的vercel链接.vercel.app)**
+**👉 [点击查看演示 Demo](https://approval-frontend-zeta.vercel.app/)**
 *(注：后端部署在 Render 免费节点，首次加载可能需要 1 分钟唤醒服务器，请耐心等待)*
 
 ## 📚 项目介绍
@@ -67,4 +67,4 @@ src/
 - [x] [cite_start]进阶任务3：动态表单 Schema 渲染 [cite: 81]
 
 ---
-*Created by [你的名字]*
+*Created by [李进]*
